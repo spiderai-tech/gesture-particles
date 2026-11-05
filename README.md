@@ -15,11 +15,11 @@ Move your hand left or right to turn the shape, and up or down to lift it.
 No build step is needed. Webcam access requires `http://localhost` or HTTPS,
 so serve the folder rather than opening the file directly:
 
-```bash
-cd Gestures to spape
+
+cd gesture-particles
 python3 -m http.server 8080
 # open http://localhost:8080 in Chrome, Edge, Firefox or Safari
-```
+
 
 Allow camera access when prompted. If you decline, use "Use mouse or touch
 instead": drag to turn the shape and tap to switch between Galaxy and KNOT.
@@ -31,8 +31,8 @@ Libraries load from CDNs (see the import map in `index.html`):
 
 ## Files
 
-```
-Galaxy-and-knot/
+
+gesture-particles/
 ├── index.html        Page layout, overlays, status panel, import map
 ├── css/
 │   └── style.css     Theme, panels, animations, responsive rules
@@ -44,7 +44,7 @@ Galaxy-and-knot/
 │   ├── hands.js      Webcam, MediaPipe HandLandmarker, gesture classification
 │   └── ui.js         DOM: overlays, status panel, chips, notices, info text
 └── README.md
-```
+
 
 ## Notes
 
