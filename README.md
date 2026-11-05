@@ -1,4 +1,4 @@
-# Gestures to Shape
+# gesture-particles
 
 Ten thousand particles that Galaxy into a flower or coil into a glowing knot,
 shaped by your hands through the webcam.
