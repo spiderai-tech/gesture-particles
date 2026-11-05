@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Shape Light With Your Hands</title>
+  <meta name="description" content="16,000 particles that Galaxy, a glowing planet, a heart or a rose, shaped by your hands through the webcam." />
+  <link rel="stylesheet" href="css/style.css" />
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+      "@mediapipe/tasks-vision": "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs"
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- 3D stage (canvas is mounted here) -->
+  <div id="stage"></div>
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">GESTUREFX</div>
+    <nav class="menu">
+      <button id="btn-about" class="ghost" type="button">ABOUT</button>
+      <button id="btn-how" class="ghost" type="button">HOW TO USE</button>
+      <button id="btn-fullscreen" class="ghost accent" type="button">FULLSCREEN</button>
+      <button id="btn-hands-view" class="ghost accent" type="button">HAND ONLY</button>
+    </nav>
+  </header>
+
+  <!-- Status panel (top-left) -->
+  <aside id="hud" class="hud" hidden>
+    <button id="btn-hud-close" class="hud-close" type="button" aria-label="Hide status panel">×</button>
+    <div class="hud-row"><span>GESTURE</span><b id="hud-gesture">—</b></div>
+    <div class="hud-row"><span>SHAPE</span><b id="hud-shape">Galaxy</b></div>
+    <div class="hud-row"><span>TRACKING</span><b id="hud-tracking">—</b></div>
+    <div class="hud-row"><span>PARTICLES</span><b>16,000</b></div>
+    <div class="hud-actions">
+      <button id="btn-restart" class="chip-btn" type="button">RESTART</button>
+      <button id="btn-camera" class="chip-btn" type="button">START CAMERA</button>
+      <button id="btn-exit" class="chip-btn" type="button">EXIT</button>
+    </div>
+  </aside>
+
+  <!-- Webcam preview (top-right) -->
+  <div id="cam" class="cam" hidden>
+    <video id="webcam" autoplay playsinline muted></video>
+    <canvas id="hand-canvas"></canvas>
+  </div>
+
+  <!-- Transient status chips -->
+  <div id="chips" class="chips" aria-live="polite"></div>
+
+  <!-- Intro -->
+  <section id="intro" class="overlay">
+    <div class="panel intro">
+    
+      <h1>SHAPE<br />WITH YOUR HANDS</h1>
+     
+      <div class="cards">
+        <div class="card">
+          <div class="art art-Galaxy" aria-hidden="true"></div>
+          <h3>Particles</h3>
+          <p>Open palm</p>
+        </div>
+        <div class="card">
+          <div class="art art-knot" aria-hidden="true"></div>
+          <h3>PLANET</h3>
+          <p>Closed fist</p>
+        </div>
+        <div class="card">
+          <div class="art art-heart" aria-hidden="true"></div>
+          <h3>HEART</h3>
+          <p>Both hands</p>
+        </div>
+        <div class="card">
+          <div class="art art-rose" aria-hidden="true"></div>
+          <h3>ROSE</h3>
+          <p>Thumbs up</p>
+        </div>
+      </div>
+      <button id="btn-begin" class="primary" type="button">BEGIN</button>
+      <button id="btn-nocam" class="link" type="button">Use mouse or touch instead</button>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <section id="loading" class="overlay">
+    <div class="panel loading">
+      <div class="ring" aria-hidden="true"></div>
+      <p id="loading-text">IGNITING THE FIELD…</p>
+    </div>
+  </section>
+
+  <!-- Notice (camera or WebGL problems) -->
+  <section id="notice" class="overlay">
+    <div class="panel notice">
+      <h2 id="notice-title"></h2>
+      <p id="notice-body"></p>
+      <div class="actions">
+        <button id="btn-retry" class="primary" type="button">TRY AGAIN</button>
+        <button id="btn-dismiss" class="link" type="button">Continue with mouse / touch</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / How to use -->
+  <section id="info" class="overlay">
+    <div class="panel info">
+      <button id="btn-info-close" class="close" type="button" aria-label="Close">×</button>
+      <h2 id="info-title"></h2>
+      <div id="info-body"></div>
+    </div>
+  </section>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

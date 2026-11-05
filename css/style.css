@@ -1,0 +1,710 @@
+/* =========================================================
+   Galaxy & KNOT — stylesheet
+   Crisp, unblurred visuals: no backdrop blur behind the particles.
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --ink: #05040b;
+  --panel: #0e0b1f;
+  --ember: #ff8a3d;
+  --rose: #ff3d8b;
+  --violet: #9d7bff;
+  --ice: #63e6ff;
+  --text: #f3efff;
+  --dim: #8d86ad;
+  --line: rgba(190, 170, 255, 0.16);
+  --display: 'Syne', 'Inter', system-ui, sans-serif;
+  --body: 'Inter', system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--body);
+  overflow: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 50% at 50% 45%, rgba(157, 123, 255, 0.10), transparent 70%),
+    radial-gradient(40% 40% at 85% 92%, rgba(255, 61, 139, 0.08), transparent 70%);
+}
+
+/* ---------- 3D stage ---------- */
+#stage {
+  position: fixed;
+  inset: 0;
+  touch-action: none;
+  cursor: grab;
+}
+
+#stage:active {
+  cursor: grabbing;
+}
+
+#stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 18px 26px;
+  pointer-events: none;
+}
+
+.topbar > * {
+  pointer-events: auto;
+}
+
+.brand {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.18em;
+}
+
+.brand span {
+  color: var(--ember);
+  margin: 0 0.35em;
+}
+
+.menu {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ghost {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--dim);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 9px 14px;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s, background 0.25s;
+}
+
+.ghost:hover,
+.ghost:focus-visible {
+  color: var(--text);
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  outline: none;
+}
+
+.ghost.accent {
+  color: var(--ice);
+  border-color: rgba(99, 230, 255, 0.35);
+}
+
+/* ---------- Status panel (top-left) ---------- */
+.hud {
+  position: fixed;
+  top: 78px;
+  left: 22px;
+  z-index: 18;
+  width: 220px;
+  padding: 14px 16px;
+  background: rgba(14, 11, 31, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+.hud-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-size: 20px;
+  line-height: 1;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+
+.hud-close:hover,
+.hud-close:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+.hud-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(190, 170, 255, 0.08);
+}
+
+.hud-row:last-of-type {
+  border-bottom: none;
+}
+
+.hud-row span {
+  font-family: var(--display);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--dim);
+}
+
+.hud-row b {
+  font-family: var(--display);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ice);
+}
+
+.hud-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.chip-btn {
+  flex: 1 1 auto;
+  font-family: var(--display);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.chip-btn:hover,
+.chip-btn:focus-visible {
+  background: rgba(99, 230, 255, 0.12);
+  border-color: rgba(99, 230, 255, 0.5);
+  outline: none;
+}
+
+/* ---------- Webcam preview (top-right) ---------- */
+.cam {
+  position: fixed;
+  top: 78px;
+  right: 22px;
+  z-index: 17;
+  width: 190px;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #000;
+  /* Drag the bottom-right corner to resize, in both the video and hand-only views. */
+  resize: both;
+  min-width: 120px;
+  min-height: 90px;
+  max-width: 80vw;
+  max-height: 70vh;
+}
+
+/* Hand-only view: hide the live video, keep the hand dots on plain black. */
+.cam.hand-only {
+  background: #05040b;
+  border-color: transparent;
+}
+
+.cam.hand-only #webcam {
+  visibility: hidden;
+}
+
+#webcam {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+  opacity: 0.9;
+}
+
+#hand-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(-1);
+  pointer-events: none;
+}
+
+/* ---------- Status chips ---------- */
+.chips {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 19;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.chip {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: var(--ice);
+  border: 1px solid rgba(99, 230, 255, 0.35);
+  background: rgba(8, 6, 18, 0.85);
+  animation: chip-in 0.35s ease both;
+}
+
+.chip-warn {
+  color: #ffe28a;
+  border-color: rgba(255, 226, 138, 0.4);
+}
+
+/* ---------- Overlays ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(4, 3, 10, 0.82);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.panel {
+  position: relative;
+  width: min(720px, 100%);
+  padding: 44px 40px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.eyebrow {
+  font-family: var(--display);
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  color: var(--ice);
+  margin: 0 0 16px;
+}
+
+.intro h1 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(20px, 3vw, 30px);
+  line-height: 1.08;
+  letter-spacing: 0.04em;
+  margin: 0 0 16px;
+  background: linear-gradient(90deg, var(--ember), var(--rose), var(--violet), var(--ice));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.sub {
+  color: var(--dim);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 30px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.card {
+  padding: 22px 14px 18px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.art {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+}
+
+.art-Galaxy {
+  background: conic-gradient(from 0deg, var(--ember), var(--rose), var(--violet), var(--ice), var(--ember));
+  -webkit-mask: radial-gradient(circle, #000 0 30%, rgba(0, 0, 0, 0.45) 58%, transparent 72%);
+          mask: radial-gradient(circle, #000 0 30%, rgba(0, 0, 0, 0.45) 58%, transparent 72%);
+  animation: turn 24s linear infinite;
+}
+
+.art-knot {
+  background: radial-gradient(circle, transparent 28%, var(--ice) 36%, var(--violet) 50%, var(--rose) 64%, transparent 72%);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+
+.art-heart {
+  background: radial-gradient(circle, transparent 30%, #ff8c9c 42%, #ff4e5e 58%, transparent 72%);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+
+.art-rose {
+  background: radial-gradient(circle, #ff5c8a 0 16%, #ff2e63 30%, #1a0710 46%, #ff9ec4 58%, transparent 70%);
+  animation: breathe 3.4s ease-in-out infinite;
+}
+
+.card h3 {
+  font-family: var(--display);
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  margin: 0 0 6px;
+}
+
+.card p {
+  margin: 0;
+  color: var(--dim);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+}
+
+.primary {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: #120a18;
+  background: linear-gradient(90deg, var(--ember), var(--rose), var(--violet));
+  border: none;
+  border-radius: 999px;
+  padding: 16px 38px;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(255, 61, 139, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.primary:hover,
+.primary:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 0 42px rgba(255, 61, 139, 0.55);
+  outline: none;
+}
+
+.link {
+  display: block;
+  margin: 16px auto 0;
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.link:hover,
+.link:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+/* ---------- Loading ---------- */
+.loading {
+  width: auto;
+  min-width: 280px;
+  padding: 40px 48px;
+}
+
+.ring {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: var(--ice);
+  border-right-color: var(--rose);
+  animation: spin 1s linear infinite;
+}
+
+.loading p {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--dim);
+}
+
+/* ---------- Notice ---------- */
+.notice h2 {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--ember);
+  margin: 0 0 14px;
+}
+
+.notice p {
+  color: var(--dim);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 22px;
+}
+
+.notice .actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---------- Info ---------- */
+.info {
+  max-width: 640px;
+  max-height: 82vh;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.info h2 {
+  font-family: var(--display);
+  font-size: 18px;
+  letter-spacing: 0.14em;
+  color: var(--ice);
+  margin: 0 0 16px;
+}
+
+.info p,
+.info li {
+  color: var(--dim);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.info b {
+  color: var(--text);
+}
+
+.info ol {
+  padding-left: 20px;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: var(--dim);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus-visible {
+  color: var(--text);
+  outline: none;
+}
+
+/* ---------- Animations ---------- */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes chip-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 720px) {
+  .topbar {
+    padding: 14px 14px;
+  }
+
+  .ghost {
+    font-size: 9px;
+    padding: 7px 9px;
+  }
+
+  .hud {
+    top: 70px;
+    left: 12px;
+    width: 160px;
+    padding: 10px 12px;
+  }
+
+  .hud-row b {
+    font-size: 10px;
+  }
+
+  .cam {
+    top: 70px;
+    right: 12px;
+    width: 118px;
+  }
+
+  .chips {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .panel {
+    padding: 30px 22px;
+  }
+
+  .cards {
+    gap: 10px;
+  }
+
+  .art {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+/* ---------- How-to guide (HOW TO USE popup) ---------- */
+.how-intro {
+  color: var(--dim);
+  margin: 0 0 16px;
+}
+
+.how-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.how-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.how-item > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.how-item b {
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}
+
+.how-item span {
+  color: var(--dim);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.how-icon {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+}
+
+.how-sub {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin: 20px 0 8px;
+}
+
+.how-list {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.how-tip {
+  margin: 18px 0 0;
+  color: var(--dim);
+  font-size: 13px;
+}
+
+.panel.info .how-item,
+.panel.info .how-list,
+.panel.info .how-intro,
+.panel.info .how-tip {
+  text-align: left;
+}
